@@ -22,7 +22,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { toast } from 'react-hot-toast';
 const BookingForm = () => {
-  const navigate = useNavigate();  // for navigation
+  const navigate = useNavigate();
 
   const [name, setName] = useState({ first: "", last: "" });
   const [wheels, setWheels] = useState("");
@@ -103,40 +103,40 @@ const BookingForm = () => {
 
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
-const handleSubmit = async () => {
-  if (!dates.start || !dates.end) {
-    return setError("Select both start and end dates.");
-  }
-
-  const formData = {
-    firstName: name.first,
-    lastName: name.last,
-    model,
-    dates: {
-      startDate: dates.start,
-      endDate: dates.end,
-    },
-  };
-
-  try {
-    const response = await fetch("http://localhost:8000/api/booking", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
-
-    const data = await response.json();
-    if (response.ok) {
-      toast.success(data.message || "Booking successful!");
-      setTimeout(() => navigate("/ListBookings"), 1500); // Redirect after toast
-    } else {
-      setError(data.message || "Error submitting form.");
-      toast.error(data.message || "Error submitting form.");
+  const handleSubmit = async () => {
+    if (!dates.start || !dates.end) {
+      return setError("Select both start and end dates.");
     }
-  } catch (err) {
-    toast.error("Submission failed. Try again.");
-  }
-};
+
+    const formData = {
+      firstName: name.first,
+      lastName: name.last,
+      model,
+      dates: {
+        startDate: dates.start,
+        endDate: dates.end,
+      },
+    };
+
+    try {
+      const response = await fetch("http://localhost:8000/api/booking", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        toast.success(data.message || "Booking successful!");
+        setTimeout(() => navigate("/ListBookings"), 1500);
+      } else {
+        setError(data.message || "Error submitting form.");
+        toast.error(data.message || "Error submitting form.");
+      }
+    } catch (err) {
+      toast.error("Submission failed. Try again.");
+    }
+  };
 
 
   const inputStyles = {
@@ -156,191 +156,207 @@ const handleSubmit = async () => {
   };
 
   return (
-    
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundImage: "url('/vehicle.jpg')",
-        padding: 2,
-      }}
-    >
-      <Card
+    <div sx={{
+
+      backgroundImage: "url('/vehicle.jpg')",
+
+    }}>
+      <Box sx={{ position: "absolute", top: 16, right: 16 }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/ListBookings")}
+          className="normal-case"
+        >
+          View List Bookings
+        </Button>
+
+      </Box>
+      <Box
         sx={{
-          maxWidth: 800,
-          width: "100%",
-          borderRadius: 4,
-          boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+          minHeight: "94vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundImage: "url('/vehicle.jpg')",
+          padding: 2,
         }}
       >
-        <CardContent sx={{ padding: 4 }}>
-          <Typography variant="h5" textAlign="center" gutterBottom>
-            Vehicle Booking Form
-          </Typography>
-
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-
-          {error && (
-            <Typography color="error" sx={{ mt: 2, textAlign: "center" }}>
-              {error}
-            </Typography>
-          )}
-
-          <Box sx={{ mt: 4 }}>
-            {activeStep === 0 && (
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <TextField
-                  label="First Name"
-                  value={name.first}
-                  onChange={(e) =>
-                    setName({ ...name, first: e.target.value })
-                  }
-                  fullWidth
-                  sx={inputStyles}
-                />
-                <TextField
-                  label="Last Name"
-                  value={name.last}
-                  onChange={(e) =>
-                    setName({ ...name, last: e.target.value })
-                  }
-                  fullWidth
-                  sx={inputStyles}
-                />
-              </Box>
-            )}
-
-            {activeStep === 1 && (
-              <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-                <FormControl sx={{ textAlign: "center" }}>
-                  <FormLabel sx={{ textAlign: "center" }}>Select Number of Wheels</FormLabel>
-                  <RadioGroup
-                    row
-                    value={wheels}
-                    onChange={(e) => handleWheelsChange(e.target.value)}
-                    sx={{ mt: 2, justifyContent: "center" }}
-                  >
-                    <FormControlLabel value="2" control={<Radio />} label="2" />
-                    <FormControlLabel value="4" control={<Radio />} label="4" />
-                  </RadioGroup>
-                </FormControl>
-              </Box>
-            )}
-
-
-            {activeStep === 2 && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "120px",
-                }}
-              >
-                <div style={{ width: "80%" }}>
-                  <InputLabel>Type of Vehicle:</InputLabel>
-                  <Select
-                    fullWidth
-                    onChange={(e) => handleVehicleTypeChange(e.target.value)}
-                    value={vehicleType}
-                    sx={{ height: "48px", fontSize: "16px" }}
-                  >
-                    <MenuItem value="">Select</MenuItem>
-                    {vehicleTypes.map((type, index) => (
-                      <MenuItem key={index} value={type.id}>
-                        {type.name || type.toString()}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              </Box>
-            )}
-
-            {activeStep === 3 && (
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "120px",
-                }}
-              >
-                <div style={{ width: "80%" }}>
-                  <InputLabel>Model:</InputLabel>
-                  <Select
-                    fullWidth
-                    onChange={(e) => setModel(e.target.value)}
-                    value={model}
-                    sx={{ height: "48px", fontSize: "16px" }}
-                  >
-                    {vehicles.map((type, index) => (
-                      <MenuItem key={index} value={type.id}>
-                        {type.name || type.toString()}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </div>
-              </Box>
-            )}
-
-            {activeStep === 4 && (
-              <Box sx={{ display: "flex", gap: 2 }}>
-                <TextField
-                  type="date"
-                  label="Start Date"
-                  InputLabelProps={{ shrink: true }}
-                  value={dates.start}
-                  onChange={(e) =>
-                    setDates({ ...dates, start: e.target.value })
-                  }
-                  fullWidth
-                />
-                <TextField
-                  type="date"
-                  label="End Date"
-                  InputLabelProps={{ shrink: true }}
-                  value={dates.end}
-                  onChange={(e) =>
-                    setDates({ ...dates, end: e.target.value })
-                  }
-                  fullWidth
-                />
-              </Box>
-            )}
-          </Box>
-        </CardContent>
-
-        <Box
+        <Card
           sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            borderTop: "1px solid #e0e0e0",
-            padding: 3,
-            backgroundColor: "#fafafa",
-            borderBottomLeftRadius: 16,
-            borderBottomRightRadius: 16,
+            maxWidth: 800,
+            width: "100%",
+            borderRadius: 4,
+            boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
           }}
         >
-          <Button variant="outlined" onClick={handleBack} disabled={activeStep === 0}>
-            Back
-          </Button>
-          <Button
-            variant="contained"
-            onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+          <CardContent sx={{ padding: 4 }}>
+            <Typography variant="h5" textAlign="center" gutterBottom>
+              Vehicle Booking Form
+            </Typography>
+
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {steps.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+
+            {error && (
+              <Typography color="error" sx={{ mt: 2, textAlign: "center" }}>
+                {error}
+              </Typography>
+            )}
+
+            <Box sx={{ mt: 4 }}>
+              {activeStep === 0 && (
+                <Box sx={{ display: "flex", gap: 2, height: "120px", }}>
+                  <TextField
+                    label="First Name"
+                    value={name.first}
+                    onChange={(e) =>
+                      setName({ ...name, first: e.target.value })
+                    }
+                    fullWidth
+                    sx={inputStyles}
+                  />
+                  <TextField
+                    label="Last Name"
+                    value={name.last}
+                    onChange={(e) =>
+                      setName({ ...name, last: e.target.value })
+                    }
+                    fullWidth
+                    sx={inputStyles}
+                  />
+                </Box>
+              )}
+
+              {activeStep === 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", width: "100%", height: "120px", }}>
+                  <FormControl sx={{ textAlign: "center" }}>
+                    <FormLabel sx={{ textAlign: "center" }}>Select Number of Wheels</FormLabel>
+                    <RadioGroup
+                      row
+                      value={wheels}
+                      onChange={(e) => handleWheelsChange(e.target.value)}
+                      sx={{ mt: 2, justifyContent: "center" }}
+                    >
+                      <FormControlLabel value="2" control={<Radio />} label="2" />
+                      <FormControlLabel value="4" control={<Radio />} label="4" />
+                    </RadioGroup>
+                  </FormControl>
+                </Box>
+              )}
+
+
+              {activeStep === 2 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "120px",
+                  }}
+                >
+                  <div style={{ width: "80%" }}>
+                    <InputLabel>Type of Vehicle:</InputLabel>
+                    <Select
+                      fullWidth
+                      onChange={(e) => handleVehicleTypeChange(e.target.value)}
+                      value={vehicleType}
+                      sx={{ height: "48px", fontSize: "16px" }}
+                    >
+                      <MenuItem value="">Select</MenuItem>
+                      {vehicleTypes.map((type, index) => (
+                        <MenuItem key={index} value={type.id}>
+                          {type.name || type.toString()}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                </Box>
+              )}
+
+              {activeStep === 3 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "120px",
+                  }}
+                >
+                  <div style={{ width: "80%" }}>
+                    <InputLabel>Model:</InputLabel>
+                    <Select
+                      fullWidth
+                      onChange={(e) => setModel(e.target.value)}
+                      value={model}
+                      sx={{ height: "48px", fontSize: "16px" }}
+                    >
+                      {vehicles.map((type, index) => (
+                        <MenuItem key={index} value={type.id}>
+                          {type.name || type.toString()}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </div>
+                </Box>
+              )}
+
+              {activeStep === 4 && (
+                <Box sx={{ display: "flex", gap: 2, height: "120px", }}>
+                  <TextField
+                    type="date"
+                    label="Start Date"
+                    InputLabelProps={{ shrink: true }}
+                    value={dates.start}
+                    onChange={(e) =>
+                      setDates({ ...dates, start: e.target.value })
+                    }
+                    fullWidth
+                  />
+                  <TextField
+                    type="date"
+                    label="End Date"
+                    InputLabelProps={{ shrink: true }}
+                    value={dates.end}
+                    onChange={(e) =>
+                      setDates({ ...dates, end: e.target.value })
+                    }
+                    fullWidth
+                  />
+                </Box>
+              )}
+            </Box>
+          </CardContent>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              borderTop: "1px solid #e0e0e0",
+              padding: 3,
+              backgroundColor: "#fafafa",
+              borderBottomLeftRadius: 16,
+              borderBottomRightRadius: 16,
+            }}
           >
-            {activeStep === steps.length - 1 ? "Submit" : "Next"}
-          </Button>
-        </Box>
-      </Card>
-    </Box>
+            <Button variant="outlined" onClick={handleBack} disabled={activeStep === 0}>
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              onClick={activeStep === steps.length - 1 ? handleSubmit : handleNext}
+            >
+              {activeStep === steps.length - 1 ? "Submit" : "Next"}
+            </Button>
+          </Box>
+        </Card>
+      </Box>
+    </div>
   );
 };
 

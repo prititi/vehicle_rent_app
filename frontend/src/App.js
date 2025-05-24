@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
-
+import './index.css';
 import HomePage from './components/HomePage';
 import BookingForm from './components/BookingForm';
 import Navbar from './components/Navbar';
@@ -17,8 +17,8 @@ function App() {
                 toastOptions={{
                     duration: 7000,
                     style: {
-                        background: '#000', 
-                        color: '#fff',    
+                        background: '#000',
+                        color: '#fff',
                     },
                 }}
             />

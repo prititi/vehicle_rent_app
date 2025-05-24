@@ -1,32 +1,26 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 export default function Navbar() {
+  const navigate = useNavigate();
+
+  const handleNavigate = (path) => {
+    navigate(path);
+  };
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+    <nav className="navbar navbar-expand-lg navbar-light bg-body-tertiary h-[8vh]">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
-          Vehicle Rental App
-        </Link>
-        <button
-          data-mdb-collapse-init
-          className="navbar-toggler"
-          type="button"
-          data-mdb-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
+        <div
+          className="navbar-brand text-2xl"
+          style={{ cursor: "pointer" }}
+          onClick={() => handleNavigate("/")}
+          role="button"
+          tabIndex={0}
         >
-          <i className="fas fa-bars"></i>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav">
-            <li className="nav-item">
-              <Link className="nav-link active" aria-current="page" to="/ListBookings">
-              View List Bookings
-              </Link>
-            </li>
-          </ul>
+          Vehicle Rental App
         </div>
+
       </div>
     </nav>
   );
