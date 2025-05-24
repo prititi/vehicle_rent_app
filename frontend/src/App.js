@@ -1,18 +1,20 @@
-// src/App.js
 import React from 'react';
-import { Button, Container, Typography } from '@mui/material';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './components/HomePage';
+import BookingForm from './components/BookingForm';
+import Navbar from './components/Navbar';
 
 function App() {
-  return (
-    <Container className="bg-gray-100 min-h-screen p-6">
-      <Typography variant="h4" gutterBottom>
-        Vehicle Rent App
-      </Typography>
-      <Button variant="contained" color="primary">
-        Material UI Button
-      </Button>
-    </Container>
-  );
+    return (
+        <Router>
+          <Navbar />
+            <Routes>
+                <Route path="/" element={<BookingForm />} />
+                <Route path="/ListBookings" element={<HomePage />} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
+
