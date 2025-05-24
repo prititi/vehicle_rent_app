@@ -2,14 +2,22 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    const types = await queryInterface.sequelize.query(
+      `SELECT id, name FROM VehicleTypes;`,
+      { type: Sequelize.QueryTypes.SELECT }
+    );
+
+    const typeMap = {};
+    types.forEach(t => typeMap[t.name] = t.id);
+
     await queryInterface.bulkInsert('Vehicles', [
-      { name: 'Vehicle 1', typeId: 1, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Vehicle 2', typeId: 1, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Vehicle 3', typeId: 2, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Vehicle 4', typeId: 2, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Vehicle 5', typeId: 3, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Vehicle 6', typeId: 3, createdAt: new Date(), updatedAt: new Date() },
-      { name: 'Vehicle 7', typeId: 4, createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Maruti Swift', typeId: typeMap['Hatchback'], createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Hyundai i20', typeId: typeMap['Hatchback'], createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Mahindra Thar', typeId: typeMap['SUV'], createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Tata Harrier', typeId: typeMap['SUV'], createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Honda City', typeId: typeMap['Sedan'], createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Royal Enfield Meteor 350', typeId: typeMap['Cruiser'], createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Yamaha R15 V4', typeId: typeMap['Sports'], createdAt: new Date(), updatedAt: new Date() },
     ], {});
   },
 

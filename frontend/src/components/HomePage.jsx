@@ -120,7 +120,7 @@ const HomePage = () => {
                                 <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>Sr.</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>First Name</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>Last Name</TableCell>
-                                <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>Vehicle ID</TableCell>
+                                <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>Vehicle Name</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>Start Date</TableCell>
                                 <TableCell sx={{ fontWeight: 'bold', fontSize: '16px', }}>End Date</TableCell>
                             </TableRow>
@@ -139,7 +139,7 @@ const HomePage = () => {
                                         <TableCell sx={{ fontSize: '14px' }} >{(page - 1) * rowsPerPage + index + 1}</TableCell>
                                         <TableCell sx={{ fontSize: '14px' }} >{booking.firstName}</TableCell>
                                         <TableCell sx={{ fontSize: '14px' }} >{booking.lastName}</TableCell>
-                                        <TableCell sx={{ fontSize: '14px' }} >{booking.vehicleId}</TableCell>
+                                        <TableCell sx={{ fontSize: '14px' }} >{booking.Vehicle.name}</TableCell>
                                         <TableCell sx={{ fontSize: '14px' }} >{new Date(booking.startDate).toLocaleDateString()}</TableCell>
                                         <TableCell sx={{ fontSize: '14px' }} >{new Date(booking.endDate).toLocaleDateString()}</TableCell>
                                     </TableRow>

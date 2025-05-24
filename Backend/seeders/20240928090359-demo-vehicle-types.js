@@ -6,6 +6,7 @@ module.exports = {
       { name: 'Hatchback', wheel: 4, createdAt: new Date(), updatedAt: new Date() },
       { name: 'SUV', wheel: 4, createdAt: new Date(), updatedAt: new Date() },
       { name: 'Sedan', wheel: 4, createdAt: new Date(), updatedAt: new Date() },
+      { name: 'Cruiser', wheel: 2, createdAt: new Date(), updatedAt: new Date() },
       { name: 'Sports', wheel: 2, createdAt: new Date(), updatedAt: new Date() },
     ], {});
   },
