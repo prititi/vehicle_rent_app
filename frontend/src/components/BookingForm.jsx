@@ -19,8 +19,11 @@ import {
   Input,
   Typography,
 } from "@mui/material";
-
+import { useNavigate } from "react-router-dom";
+import { toast } from 'react-hot-toast';
 const BookingForm = () => {
+  const navigate = useNavigate();  // for navigation
+
   const [name, setName] = useState({ first: "", last: "" });
   const [wheels, setWheels] = useState("");
   const [vehicleType, setVehicleType] = useState("");
@@ -100,37 +103,41 @@ const BookingForm = () => {
 
   const handleBack = () => setActiveStep((prev) => prev - 1);
 
-  const handleSubmit = async () => {
-    if (!dates.start || !dates.end) {
-      return setError("Select both start and end dates.");
-    }
+const handleSubmit = async () => {
+  if (!dates.start || !dates.end) {
+    return setError("Select both start and end dates.");
+  }
 
-    const formData = {
-      firstName: name.first,
-      lastName: name.last,
-      model,
-      dates: {
-        startDate: dates.start,
-        endDate: dates.end,
-      },
-    };
-
-    try {
-      const response = await fetch("http://localhost:8000/api/booking", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        alert(data.message);
-      } else {
-        setError(data.message || "Error submitting form.");
-      }
-    } catch (err) {
-      alert("Submission failed. Try again.");
-    }
+  const formData = {
+    firstName: name.first,
+    lastName: name.last,
+    model,
+    dates: {
+      startDate: dates.start,
+      endDate: dates.end,
+    },
   };
+
+  try {
+    const response = await fetch("http://localhost:8000/api/booking", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      toast.success(data.message || "Booking successful!");
+      setTimeout(() => navigate("/ListBookings"), 1500); // Redirect after toast
+    } else {
+      setError(data.message || "Error submitting form.");
+      toast.error(data.message || "Error submitting form.");
+    }
+  } catch (err) {
+    toast.error("Submission failed. Try again.");
+  }
+};
+
 
   const inputStyles = {
     backgroundColor: "#fff",
@@ -149,6 +156,7 @@ const BookingForm = () => {
   };
 
   return (
+    
     <Box
       sx={{
         minHeight: "100vh",
