@@ -15,5 +15,8 @@
     "nodemon": "^3.1.10",
     "sequelize": "^6.37.7",
     "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "sequelize-auto-migrations": "^1.0.3"
   }
 }
